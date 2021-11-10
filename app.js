@@ -38,6 +38,13 @@ app.get('/1.txt', function(req, res) {
     res.sendfile(__dirname + '/text/1.txt');
 });
 
+// middleware
+app.use(logger('dev'));
+app.use(express.static(__dirname + '/text'));
+app.use(function(req, res, next) {
+    console.log('my custom middleware !');
+    next();
+});
 
 
 // view engine setup
