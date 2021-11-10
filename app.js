@@ -38,12 +38,24 @@ app.get('/1.txt', function(req, res) {
     res.sendfile(__dirname + '/text/1.txt');
 });
 
+//#8
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+
 // middleware
 app.use(logger('dev'));
 app.use(express.static(__dirname + '/text'));
-app.use(function(req, res, next) {
-    console.log('my custom middleware !');
+app.param('id', function(req, res, next, id) {
+    var users = ['hara', 'shinjo', 'tatsunami'];
+    req.params.name = users[id];
     next();
+});
+app.get('/1/:id', function(req, res) {
+    res.send('hello ' + req.params.name);
+});
+app.get('/bye/:id', function(req, res) {
+    res.send('bye ' + req.params.name);
 });
 
 
