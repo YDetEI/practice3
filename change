@@ -1,0 +1,29 @@
+npm install -g express
+npm install express-generator -g
+
+node app
+npm start
+
+app.use(app.router);
+不要
+
+nodemon app
+nodemon app.js
+
+Express 4 を利用する場合、express.logger は morgan という別パッケージを利用するように変更されている。
+npm install morgan
+で morgan をインストールしたら app.js にて、
+var logger = require('morgan');
+として morgan をロード。あとは「app.use(express.logger('dev'));」を「app.use(logger('dev'));」に変更。
+参考: http://expressjs.com/guide/migrating-4.html#example-migration
+
+express.json, express.urlencoded は body-parser という別パッケージを使うように変更されている。
+npm install body-parser
+で body-parser をインストールしたら app.js にて、
+var bodyParser = require('body-parser');
+として body-parser をロード。あとは、
+・「app.use(express.json());」を「app.use(bodyParser.json());」に変更。
+・「app.use(express.urlencoded());」を「app.use(bodyParser.urlencoded({extended: true}));」に変更。
+なお、urlencoded に与える extended パラメータの値については公式サイト等を参照。
+参考: https://www.npmjs.com/package/body-parser
+
