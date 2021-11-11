@@ -16,39 +16,31 @@ var bodyParser = require('body-parser');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-// //1
-// app.get('/', function(req, res) {
-//     res.send('hello world');
-// });
-// app.get('/about', function(req, res) {
-//     res.send('about this page!');
-// });
 
-// //2
-// app.get('/users/:name?', function(req, res) {
-//     if (req.params.name) {
-//         res.send('hello, ' + req.params.name);
-//     } else {
-//         res.send('hello, nobody!');
-//     }
-// });
-// app.get('/items/:id([0-9]+)', function(req, res) {
-//     res.send('item no: ' + req.params.id);
-// });
 
-// //3
-// app.use(express.static(__dirname + '/text'));
-// app.get('/1.txt', function(req, res) {
-//     res.sendfile(__dirname + '/text/1.txt');
-// });
 
+
+var connect = require('connect')
+var methodOverride = require('method-override')
+
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
+app.use(bodyParser.urlencoded())
+app.use(methodOverride(function(req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        // look in urlencoded POST bodies and delete it
+        var method = req.body._method
+        delete req.body._method
+        return method
+    }
+}))
 
 
 
 // middleware
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded());
 
 app.use(logger('dev'));
 app.use(express.static(__dirname + '/text'));
